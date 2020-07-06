@@ -50,6 +50,11 @@ import Model.Components.Wheels.Spokes;
 import Model.Components.Wheels.Tube;
 import Model.Components.Wheels.Tyre;
 
+/**
+ * 
+ * @author AKSHARA
+ *
+ */
 class CyclePriceCalculator extends Thread {
 
 	Cycle cycle;
@@ -69,22 +74,40 @@ class CyclePriceCalculator extends Thread {
 	private final String CURRENT_INDEX = "currentIndex";
 	private final String RATE = "rate";
 
+	/**
+	 * CyclePriceCalculator is a parametrized constructor
+	 * @param cycle
+	 * @param blockingQueue
+	 */
 	CyclePriceCalculator(Cycle cycle, BlockingQueue<Map<String, Object>> blockingQueue) {
 		this.cycle = cycle;
 		this.blockingQueue = blockingQueue;
 	}
 
+	/**
+	 * getCurrentYear will return the current Calendar year
+	 * @return
+	 */
 	String getCurrentYear() {
 		Calendar now = Calendar.getInstance();
 		return String.valueOf(now.get(Calendar.YEAR));
 	}
 
+	/**
+	 * getCurrentMonth will return the current Calendar month
+	 * @return
+	 */
 	String getCurrentMonth() {
 		Format format = new SimpleDateFormat("MMM");
 		String month = format.format(new Date());
 		return month.toLowerCase();
 	}
 
+	/**
+	 * cycleBuilder is used to add parts to the cycle which is not mentioned by user but essential for the cycle
+	 * @param cycleMap
+	 * @return
+	 */
 	Map<String, Object> cycleBuilder(Map<String, Object> cycleMap) {
 		if (!cycleMap.containsKey(NAME))
 			cycleMap.put(NAME, CYCLE);
@@ -107,6 +130,11 @@ class CyclePriceCalculator extends Thread {
 		return cycleMap;
 	}
 
+	/**
+	 * initialiseSubComponentMap is used to set the map values to its default values
+	 * @param subComponentMap
+	 * @return
+	 */
 	Map<String, Integer> initialiseSubComponentMap(Map<String, Integer> subComponentMap) {
 		subComponentMap.put(RATE, 0);
 		subComponentMap.put(YEAR_FLAG, 0);
@@ -114,6 +142,15 @@ class CyclePriceCalculator extends Thread {
 		return subComponentMap;
 	}
 
+	/**
+	 * findRate is used to identify the rate of the component according to the date of pricing 
+	 * @param subComponentMap
+	 * @param year
+	 * @param month
+	 * @param costMap
+	 * @param index
+	 * @return
+	 */
 	Map<String, Integer> findRate(Map<String, Integer> subComponentMap, String year, String month,
 			Map<String, Integer> costMap, int index) {
 		if (String.valueOf(subComponentMap.get(YEAR)).equals(year)) {
@@ -125,6 +162,14 @@ class CyclePriceCalculator extends Thread {
 		return subComponentMap;
 	}
 
+	/**
+	 * frameRateCalculator will return the rate of the frame
+	 * @param subComponent
+	 * @param year
+	 * @param month
+	 * @param cycle
+	 * @return
+	 */
 	String frameRateCalculator(String subComponent, String year, String month, Cycle cycle) {
 		int materialrate = 0, frameTypeRate = 0, rate = 0;
 		Map<String, Integer> subComponentMap = new HashMap<>();
@@ -199,6 +244,14 @@ class CyclePriceCalculator extends Thread {
 		return String.valueOf(rate);
 	}
 
+	/**
+	 * wheelsRateCalculator will return the rate of the wheel
+	 * @param subComponent
+	 * @param year
+	 * @param month
+	 * @param cycle
+	 * @return
+	 */
 	String wheelsRateCalculator(String subComponent, String year, String month, Cycle cycle) {
 		Map<String, Integer> subComponentMap = new HashMap<>();
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
@@ -245,6 +298,14 @@ class CyclePriceCalculator extends Thread {
 		return String.valueOf(rate);
 	}
 
+	/**
+	 * chainAssemblyRateCalculator will return the rate of the gear based on the type of gear
+	 * @param subComponent
+	 * @param year
+	 * @param month
+	 * @param cycle
+	 * @return
+	 */
 	String chainAssemblyRateCalculator(String subComponent, String year, String month, Cycle cycle) {
 		Map<String, Integer> subComponentMap = new HashMap<>();
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
@@ -315,6 +376,14 @@ class CyclePriceCalculator extends Thread {
 		return String.valueOf(subComponentMap.get(RATE));
 	}
 
+	/**
+	 * seatingRateCalculator will return the rate of the saddle based on the type of saddle
+	 * @param subComponent
+	 * @param year
+	 * @param month
+	 * @param cycle
+	 * @return
+	 */
 	String seatingRateCalculator(String subComponent, String year, String month, Cycle cycle) {
 		Map<String, Integer> subComponentMap = new HashMap<>();
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
@@ -349,6 +418,14 @@ class CyclePriceCalculator extends Thread {
 		return String.valueOf(subComponentMap.get(RATE));
 	}
 
+	/**
+	 * handleBarRateCalculator will return the rate of the handle bar based on the type of handle bar
+	 * @param subComponent
+	 * @param year
+	 * @param month
+	 * @param cycle
+	 * @return
+	 */
 	String handleBarRateCalculator(String subComponent, String year, String month, Cycle cycle) {
 		Map<String, Integer> subComponentMap = new HashMap<>();
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
@@ -383,6 +460,11 @@ class CyclePriceCalculator extends Thread {
 		return String.valueOf(subComponentMap.get(RATE));
 	}
 
+	/**
+	 * cyclePriceCalculator will return the rate of the cycle based on their part rates 
+	 * @param cyclePriceMap
+	 * @return
+	 */
 	String cyclePriceCalculator(Map<String, String> cyclePriceMap) {
 		int frameRate = Integer.parseInt(cyclePriceMap.get(FRAME));
 		int wheelsRate = Integer.parseInt(cyclePriceMap.get(WHEELS));
@@ -393,6 +475,12 @@ class CyclePriceCalculator extends Thread {
 		return String.valueOf(rate);
 	}
 
+	/**
+	 * priceEngine will return the map which consists of part names and its rates
+	 * @param cycleMap
+	 * @param cycle
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	Map<String, String> priceEngine(Map<String, Object> cycleMap, Cycle cycle) {
 		Map<String, String> dateMap = (Map<String, String>) cycleMap.get(DATE_OF_PRICING);
@@ -428,6 +516,11 @@ class CyclePriceCalculator extends Thread {
 	}
 }
 
+/**
+ * 
+ * @author Akshara T S B
+ *
+ */
 public class CycleEstimator {
 	@SuppressWarnings({ "unchecked", "resource" })
 	public static void main(String[] args) {

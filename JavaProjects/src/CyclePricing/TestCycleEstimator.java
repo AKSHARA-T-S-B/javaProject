@@ -44,6 +44,11 @@ import Model.Components.Wheels.Tube;
 import Model.Components.Wheels.Tyre;
 import Model.Components.Wheels.Wheels;
 
+/**
+ * 
+ * @author AKSHARA
+ *
+ */
 public class TestCycleEstimator {
 	CycleEstimator cycleEstimator = new CycleEstimator();
 	Cycle cycle = new Cycle();
@@ -69,6 +74,9 @@ public class TestCycleEstimator {
 		return costMap;
 	}
 
+	/**
+	 * testcyclePriceCalculator is to test cyclePriceCalculator
+	 */
 	@Test
 	public void testcyclePriceCalculator() {
 		Map<String, String> cyclePriceMap = new HashMap<>();
@@ -82,6 +90,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testGetCurrentYear is to test getCurrentYear()
+	 */
 	@Test
 	public void testGetCurrentYear() {
 		String expected = "2020";
@@ -89,6 +100,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testGetCurrentMonth is to test getCurrentMonth
+	 */
 	@Test
 	public void testGetCurrentMonth() {
 		String expected = "jul";
@@ -96,6 +110,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testCycleBuilder is to test cycleBuilder
+	 */
 	@Test
 	public void testCycleBuilder() {
 		Map<String, Object> cycleMap = new HashMap<>();
@@ -115,6 +132,9 @@ public class TestCycleEstimator {
 		assertEquals(cycleMap.toString(), cyclePriceCalculator.cycleBuilder(cycleMap1).toString());
 	}
 
+	/**
+	 * testInitialiseSubComponentMap is to test initialiseSubComponentMap
+	 */
 	@Test
 	public void testInitialiseSubComponentMap() {
 		Map<String, Integer> subComponentMap = new HashMap<>();
@@ -124,6 +144,9 @@ public class TestCycleEstimator {
 		assertEquals(subComponentMap, cyclePriceCalculator.initialiseSubComponentMap(new HashMap<String, Integer>()));
 	}
 
+	/**
+	 * testFindRate is to test findRate
+	 */
 	@Test
 	public void testFindRate() {
 		Map<String, Integer> subComponentMap = new HashMap<>();
@@ -140,6 +163,9 @@ public class TestCycleEstimator {
 		assertEquals(subComponentMap, subComponentMap2);
 	}
 
+	/**
+	 * testFrameRateCalculator1 is to test frame type diamond in frameRateCalculator
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator1() {
@@ -169,6 +195,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testFrameRateCalculator2 is to test frame type stepthrough in frameRateCalculator 
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator2() {
@@ -198,6 +227,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testFrameRateCalculator3 is to test frame type contilever in frameRateCalculator
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator3() {
@@ -227,6 +259,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testFrameRateCalculator4 is to test frame type recumbent in frameRateCalculator
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator4() {
@@ -256,6 +291,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testFrameRateCalculator5 is to test frame type titanium in frameRateCalculator
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator5() {
@@ -285,6 +323,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testFrameRateCalculator6 is to test frame type aluminum in frameRateCalculator
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator6() {
@@ -314,6 +355,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testFrameRateCalculator7 is test frame type steel in frameRateCalculator
+	 */
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testFrameRateCalculator7() {
@@ -343,6 +387,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testWheelsRateCalculator1 is test tubesless type of wheels in wheelsRateCalculator 
+	 */
 	@Test
 	public void testWheelsRateCalculator1() {
 		String expected = "1650";
@@ -381,6 +428,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testWheelsRateCalculator2 is test rimless type of wheels in wheelsRateCalculator 
+	 */
 	@Test
 	public void testWheelsRateCalculator2() {
 		String expected = "1500";
@@ -419,6 +469,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testWheelsRateCalculator3 is test spokeless type of wheels in wheelsRateCalculator 
+	 */
 	@Test
 	public void testWheelsRateCalculator3() {
 		String expected = "1200";
@@ -457,6 +510,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator1 is to test fixed gear in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator1() {
 		String expected = "520";
@@ -480,6 +536,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator2 is to test gear3 in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator2() {
 		String expected = "600";
@@ -503,6 +562,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator3 is to test gear4 in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator3() {
 		String expected = "650";
@@ -526,6 +588,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator4 is to test gear5 in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator4() {
 		String expected = "670";
@@ -549,6 +614,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator5 is to test gear6 in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator5() {
 		String expected = "680";
@@ -572,6 +640,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator6 is to test gear7 in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator6() {
 		String expected = "680";
@@ -595,6 +666,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testChainAssemblyRateCalculator7 is to test gear8 in chainAssemblyRateCalculator
+	 */
 	@Test
 	public void testChainAssemblyRateCalculator7() {
 		String expected = "680";
@@ -618,6 +692,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testSeatingRateCalculator1 is to test cruiser saddle in seatingRateCalculator
+	 */
 	@Test
 	public void testSeatingRateCalculator1() {
 		String expected = "560";
@@ -641,6 +718,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testSeatingRateCalculator2 is to test racing saddle in seatingRateCalculator
+	 */
 	@Test
 	public void testSeatingRateCalculator2() {
 		String expected = "590";
@@ -664,6 +744,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testSeatingRateCalculator3 is to test comfort saddle in seatingRateCalculator
+	 */
 	@Test
 	public void testSeatingRateCalculator3() {
 		String expected = "650";
@@ -687,6 +770,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testHandlBarRateCalculator1 is to test drop handle bar in handlBarRateCalculator
+	 */
 	@Test
 	public void testHandlBarRateCalculator1() {
 		String expected = "700";
@@ -710,6 +796,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testHandlBarRateCalculator2 is to test pursuit handle bar in handlBarRateCalculator
+	 */
 	@Test
 	public void testHandlBarRateCalculator2() {
 		String expected = "700";
@@ -733,6 +822,9 @@ public class TestCycleEstimator {
 		assertEquals(expected, actual);
 	}
 
+	/**
+	 * testHandlBarRateCalculator3 is to test riser handle bar in handlBarRateCalculator
+	 */
 	@Test
 	public void testHandlBarRateCalculator3() {
 		String expected = "700";
@@ -753,19 +845,6 @@ public class TestCycleEstimator {
 		Mockito.when(cyclePriceCalculatorSpy.findRate(anyMap(), anyString(), anyString(), anyMap(), anyInt()))
 				.thenReturn(subComponentMap);
 		String actual = cyclePriceCalculatorSpy.handleBarRateCalculator("riser", "2020", "jul", cycle);
-		assertEquals(expected, actual);
-	}
-
-	@Test
-	public void testCyclePriceCalculator() {
-		String expected = "5000";
-		Map<String, String> cyclePriceMap = new HashMap<>();
-		cyclePriceMap.put("frame", "1000");
-		cyclePriceMap.put("wheels", "1000");
-		cyclePriceMap.put("seating", "1000");
-		cyclePriceMap.put("chainAssembly", "1000");
-		cyclePriceMap.put("handleBar", "1000");
-		String actual = cyclePriceCalculator.cyclePriceCalculator(cyclePriceMap);
 		assertEquals(expected, actual);
 	}
 
