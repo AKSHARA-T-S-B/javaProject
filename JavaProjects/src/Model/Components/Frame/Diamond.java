@@ -18,8 +18,8 @@ public class Diamond {
 	private int nov;
 	private int dec;
 	private Map<String, Integer> costMap = new HashMap<>();
-	
-	public synchronized Map<String, Integer> getCostMap(){
+
+	public synchronized Map<String, Integer> getCostMap() {
 		costMap.put("year", year);
 		costMap.put("jan", jan);
 		costMap.put("feb", feb);
@@ -143,5 +143,5 @@ public class Diamond {
 	public synchronized void setCostMap(Map<String, Integer> costMap) {
 		this.costMap = costMap;
 	}
-	
+
 }

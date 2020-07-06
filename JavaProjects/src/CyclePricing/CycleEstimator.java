@@ -50,11 +50,11 @@ import Model.Components.Wheels.Spokes;
 import Model.Components.Wheels.Tube;
 import Model.Components.Wheels.Tyre;
 
-class CyclePriceCalculator extends Thread{
-	
+class CyclePriceCalculator extends Thread {
+
 	Cycle cycle;
 	BlockingQueue<Map<String, Object>> blockingQueue;
-	
+
 	private final String CYCLE = "cycle";
 	private final String NAME = "name";
 	private final String DATE_OF_PRICING = "date_of_pricing";
@@ -68,9 +68,8 @@ class CyclePriceCalculator extends Thread{
 	private final String YEAR_FLAG = "yearFlag";
 	private final String CURRENT_INDEX = "currentIndex";
 	private final String RATE = "rate";
-	
-	
-	CyclePriceCalculator(Cycle cycle, BlockingQueue<Map<String, Object>> blockingQueue){
+
+	CyclePriceCalculator(Cycle cycle, BlockingQueue<Map<String, Object>> blockingQueue) {
 		this.cycle = cycle;
 		this.blockingQueue = blockingQueue;
 	}
@@ -107,7 +106,7 @@ class CyclePriceCalculator extends Thread{
 			cycleMap.put(HANDLE_BAR, "pursuit");
 		return cycleMap;
 	}
-	
+
 	Map<String, Integer> initialiseSubComponentMap(Map<String, Integer> subComponentMap) {
 		subComponentMap.put(RATE, 0);
 		subComponentMap.put(YEAR_FLAG, 0);
@@ -115,7 +114,8 @@ class CyclePriceCalculator extends Thread{
 		return subComponentMap;
 	}
 
-	Map<String, Integer> findRate(Map<String, Integer> subComponentMap, String year, String month, Map<String, Integer> costMap, int index) {
+	Map<String, Integer> findRate(Map<String, Integer> subComponentMap, String year, String month,
+			Map<String, Integer> costMap, int index) {
 		if (String.valueOf(subComponentMap.get(YEAR)).equals(year)) {
 			subComponentMap.put(YEAR_FLAG, 1);
 			subComponentMap.put(RATE, costMap.get(month));
@@ -124,78 +124,79 @@ class CyclePriceCalculator extends Thread{
 			subComponentMap.put(CURRENT_INDEX, index);
 		return subComponentMap;
 	}
-	
+
 	String frameRateCalculator(String subComponent, String year, String month, Cycle cycle) {
-		int materialrate = 0, frameTypeRate = 0;
+		int materialrate = 0, frameTypeRate = 0, rate = 0;
 		Map<String, Integer> subComponentMap = new HashMap<>();
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
-		if(subComponent.contains("step")) {
+		if (subComponent.contains("step")) {
 			StepThrough[] stepThrough = cycle.getFrame().getStepThrough();
-			for(int i = 0; i < stepThrough.length; i++) {
+			for (int i = 0; i < stepThrough.length; i++) {
 				subComponentMap.put(YEAR, stepThrough[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, stepThrough[i].getCostMap(), i);
 				frameTypeRate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				frameTypeRate = stepThrough[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
-		}else if(subComponent.contains("contilever")) {
+		} else if (subComponent.contains("contilever")) {
 			Contilever[] contilever = cycle.getFrame().getContilever();
-			for(int i = 0; i < contilever.length; i++) {
+			for (int i = 0; i < contilever.length; i++) {
 				subComponentMap.put(YEAR, contilever[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, contilever[i].getCostMap(), i);
 				frameTypeRate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				frameTypeRate = contilever[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
-		}else if(subComponent.contains("recumbent")) {
+		} else if (subComponent.contains("recumbent")) {
 			Recumbent[] recumbent = cycle.getFrame().getRecumbent();
-			for(int i = 0; i < recumbent.length; i++) {
+			for (int i = 0; i < recumbent.length; i++) {
 				subComponentMap.put(YEAR, recumbent[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, recumbent[i].getCostMap(), i);
 				frameTypeRate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				frameTypeRate = recumbent[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
-		}else {
+		} else {
 			Diamond[] diamond = cycle.getFrame().getDiamond();
-			for(int i = 0; i < diamond.length; i++) {
+			for (int i = 0; i < diamond.length; i++) {
 				subComponentMap.put(YEAR, diamond[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, diamond[i].getCostMap(), i);
 				frameTypeRate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				frameTypeRate = diamond[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
 		}
 		subComponentMap.put(YEAR_FLAG, 0);
-		if(subComponent.contains("aluminium")) {
+		if (subComponent.contains("aluminium")) {
 			Aluminium[] aluminium = cycle.getFrame().getAluminium();
-			for(int i = 0; i < aluminium.length; i++) {
+			for (int i = 0; i < aluminium.length; i++) {
 				subComponentMap.put(YEAR, aluminium[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, aluminium[i].getCostMap(), i);
 				materialrate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				materialrate = aluminium[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
-		}else if(subComponent.contains("titanium")) {
+		} else if (subComponent.contains("titanium")) {
 			Titanium[] titanium = cycle.getFrame().getTitanium();
-			for(int i = 0; i < titanium.length; i++) {
+			for (int i = 0; i < titanium.length; i++) {
 				subComponentMap.put(YEAR, titanium[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, titanium[i].getCostMap(), i);
 				materialrate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				materialrate = titanium[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
-		}else{
+		} else {
 			Steel[] steel = cycle.getFrame().getSteel();
-			for(int i = 0; i < steel.length; i++) {
+			for (int i = 0; i < steel.length; i++) {
 				subComponentMap.put(YEAR, steel[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, steel[i].getCostMap(), i);
 				materialrate = subComponentMap.get(RATE);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
+			if (subComponentMap.get(YEAR_FLAG) == 0)
 				materialrate = steel[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
 		}
-		return String.valueOf(materialrate + frameTypeRate);
+		rate = frameTypeRate + materialrate;
+		return String.valueOf(rate);
 	}
 
 	String wheelsRateCalculator(String subComponent, String year, String month, Cycle cycle) {
@@ -203,43 +204,43 @@ class CyclePriceCalculator extends Thread{
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
 		int rimRate = 0, spokeRate = 0, tubeRate = 0, tyreRate = 0, rate = 0;
 		Rim[] rim = cycle.getWheels().getRim();
-		for(int i=0; i<rim.length; i++) {
+		for (int i = 0; i < rim.length; i++) {
 			subComponentMap.put(YEAR, rim[i].getYear());
 			subComponentMap = findRate(subComponentMap, year, month, rim[i].getCostMap(), i);
 			rimRate = subComponentMap.get(RATE);
 		}
-		if (subComponentMap.get(YEAR_FLAG) == 0) 
+		if (subComponentMap.get(YEAR_FLAG) == 0)
 			rimRate = rim[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
 		Spokes[] spokes = cycle.getWheels().getSpokes();
-		for(int i=0; i<spokes.length; i++) {
+		for (int i = 0; i < spokes.length; i++) {
 			subComponentMap.put(YEAR, spokes[i].getYear());
 			subComponentMap = findRate(subComponentMap, year, month, spokes[i].getCostMap(), i);
 			spokeRate = subComponentMap.get(RATE);
 		}
-		if (subComponentMap.get(YEAR_FLAG) == 0) 
+		if (subComponentMap.get(YEAR_FLAG) == 0)
 			spokeRate = spokes[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
 		Tube[] tube = cycle.getWheels().getTube();
-		for(int i=0; i<tube.length; i++) {
+		for (int i = 0; i < tube.length; i++) {
 			subComponentMap.put(YEAR, tube[i].getYear());
 			subComponentMap = findRate(subComponentMap, year, month, tube[i].getCostMap(), i);
 			tubeRate = subComponentMap.get(RATE);
 		}
-		if (subComponentMap.get(YEAR_FLAG) == 0) 
+		if (subComponentMap.get(YEAR_FLAG) == 0)
 			tubeRate = tube[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
-		Tyre[] tyre =  cycle.getWheels().getTyre();
-		for(int i=0; i<tyre.length; i++) {
+		Tyre[] tyre = cycle.getWheels().getTyre();
+		for (int i = 0; i < tyre.length; i++) {
 			subComponentMap.put(YEAR, tyre[i].getYear());
 			subComponentMap = findRate(subComponentMap, year, month, tyre[i].getCostMap(), i);
 			tyreRate = subComponentMap.get(RATE);
 		}
-		if (subComponentMap.get(YEAR_FLAG) == 0) 
+		if (subComponentMap.get(YEAR_FLAG) == 0)
 			tyreRate = tyre[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth());
 		rate = rimRate + spokeRate + tubeRate + tyreRate;
-		if(subComponent.contains("tubeless")) 
+		if (subComponent.contains("tubeless"))
 			rate = rate - tubeRate;
-		if(subComponent.contains("rimless"))
+		if (subComponent.contains("rimless"))
 			rate = rate - rimRate;
-		if(subComponent.contains("spokeless"))
+		if (subComponent.contains("spokeless"))
 			rate = rate - spokeRate;
 		return String.valueOf(rate);
 	}
@@ -249,60 +250,67 @@ class CyclePriceCalculator extends Thread{
 		subComponentMap = initialiseSubComponentMap(subComponentMap);
 		if (subComponent.contains("3")) {
 			Gear3[] gear3 = cycle.getChainAssembly().getGear3();
-			for(int i = 0; i < gear3.length; i++) {
+			for (int i = 0; i < gear3.length; i++) {
 				subComponentMap.put(YEAR, gear3[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, gear3[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, gear3[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						gear3[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else if (subComponent.contains("4")) {
 			Gear4[] gear4 = cycle.getChainAssembly().getGear4();
-			for(int i = 0; i < gear4.length; i++) {
+			for (int i = 0; i < gear4.length; i++) {
 				subComponentMap.put(YEAR, gear4[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, gear4[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, gear4[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
-		} else if (subComponent.contains("5")) {	
+				subComponentMap.put(RATE,
+						gear4[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+		} else if (subComponent.contains("5")) {
 			Gear5[] gear5 = cycle.getChainAssembly().getGear5();
-			for(int i = 0; i < gear5.length; i++) {
+			for (int i = 0; i < gear5.length; i++) {
 				subComponentMap.put(YEAR, gear5[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, gear5[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, gear5[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						gear5[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else if (subComponent.contains("6")) {
 			Gear6[] gear6 = cycle.getChainAssembly().getGear6();
-			for(int i = 0; i < gear6.length; i++) {
+			for (int i = 0; i < gear6.length; i++) {
 				subComponentMap.put(YEAR, gear6[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, gear6[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, gear6[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						gear6[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else if (subComponent.contains("7")) {
 			Gear7[] gear7 = cycle.getChainAssembly().getGear7();
-			for(int i = 0; i < gear7.length; i++) {
+			for (int i = 0; i < gear7.length; i++) {
 				subComponentMap.put(YEAR, gear7[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, gear7[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, gear7[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						gear7[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else if (subComponent.contains("8")) {
 			Gear8[] gear8 = cycle.getChainAssembly().getGear8();
-			for(int i = 0; i < gear8.length; i++) {
+			for (int i = 0; i < gear8.length; i++) {
 				subComponentMap.put(YEAR, gear8[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, gear8[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, gear8[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						gear8[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else {
 			FixedGear[] fixedGear = cycle.getChainAssembly().getFixedGear();
-			for(int i = 0; i < fixedGear.length; i++) {
+			for (int i = 0; i < fixedGear.length; i++) {
 				subComponentMap.put(YEAR, fixedGear[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, fixedGear[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, fixedGear[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						fixedGear[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		}
 		return String.valueOf(subComponentMap.get(RATE));
 	}
@@ -316,24 +324,27 @@ class CyclePriceCalculator extends Thread{
 				subComponentMap.put(YEAR, cruiserSaddle[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, cruiserSaddle[i].getCostMap(), i);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
-				subComponentMap.put(RATE, cruiserSaddle[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+			if (subComponentMap.get(YEAR_FLAG) == 0)
+				subComponentMap.put(RATE,
+						cruiserSaddle[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else if (subComponent.contains("racing")) {
 			RacingSaddle[] racingSaddle = cycle.getSeating().getRacingSaddle();
 			for (int i = 0; i < racingSaddle.length; i++) {
 				subComponentMap.put(YEAR, racingSaddle[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, racingSaddle[i].getCostMap(), i);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
-				subComponentMap.put(RATE, racingSaddle[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+			if (subComponentMap.get(YEAR_FLAG) == 0)
+				subComponentMap.put(RATE,
+						racingSaddle[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else {
 			ComfortSaddle[] comfortSaddle = cycle.getSeating().getComfortSaddle();
 			for (int i = 0; i < comfortSaddle.length; i++) {
 				subComponentMap.put(YEAR, comfortSaddle[i].getYear());
 				subComponentMap = findRate(subComponentMap, year, month, comfortSaddle[i].getCostMap(), i);
 			}
-			if (subComponentMap.get(YEAR_FLAG) == 0) 
-				subComponentMap.put(RATE, comfortSaddle[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+			if (subComponentMap.get(YEAR_FLAG) == 0)
+				subComponentMap.put(RATE,
+						comfortSaddle[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		}
 		return String.valueOf(subComponentMap.get(RATE));
 	}
@@ -348,7 +359,8 @@ class CyclePriceCalculator extends Thread{
 				subComponentMap = findRate(subComponentMap, year, month, dropBar[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, dropBar[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						dropBar[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else if (subComponent.equals("riser")) {
 			RiserBar[] riserBar = cycle.getHandleBar().getRiserBar();
 			for (int i = 0; i < riserBar.length; i++) {
@@ -356,7 +368,8 @@ class CyclePriceCalculator extends Thread{
 				subComponentMap = findRate(subComponentMap, year, month, riserBar[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, riserBar[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						riserBar[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		} else {
 			PursuitBar[] pursuitBar = cycle.getHandleBar().getPursuitBar();
 			for (int i = 0; i < pursuitBar.length; i++) {
@@ -364,7 +377,8 @@ class CyclePriceCalculator extends Thread{
 				subComponentMap = findRate(subComponentMap, year, month, pursuitBar[i].getCostMap(), i);
 			}
 			if (subComponentMap.get(YEAR_FLAG) == 0)
-				subComponentMap.put(RATE, pursuitBar[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
+				subComponentMap.put(RATE,
+						pursuitBar[subComponentMap.get(CURRENT_INDEX)].getCostMap().get(getCurrentMonth()));
 		}
 		return String.valueOf(subComponentMap.get(RATE));
 	}
@@ -391,33 +405,30 @@ class CyclePriceCalculator extends Thread{
 		cyclePriceMap.put(CHAIN_ASSEMBLY,
 				chainAssemblyRateCalculator(cycleMap.get(CHAIN_ASSEMBLY).toString(), year, month, cycle));
 		cyclePriceMap.put(SEATING, seatingRateCalculator(cycleMap.get(SEATING).toString(), year, month, cycle));
-		cyclePriceMap.put(HANDLE_BAR,
-				handleBarRateCalculator(cycleMap.get(HANDLE_BAR).toString(), year, month, cycle));
+		cyclePriceMap.put(HANDLE_BAR, handleBarRateCalculator(cycleMap.get(HANDLE_BAR).toString(), year, month, cycle));
 		cyclePriceMap.put(CYCLE, cyclePriceCalculator(cyclePriceMap));
-		return cyclePriceMap; 
+		return cyclePriceMap;
 	}
-	
+
 	public void run() {
 		try {
-			while(!blockingQueue.isEmpty()) {
+			while (!blockingQueue.isEmpty()) {
 				Map<String, Object> cycleMap = cycleBuilder(blockingQueue.take());
 				Map<String, String> cyclePriceMap = priceEngine(cycleMap, cycle);
-				System.out.println("Name : " + cyclePriceMap.get(NAME) + "\n" +
-						   "Cycle : Rs." + cyclePriceMap.get(CYCLE) + "\n" + 
-						   "Frame : Rs." + cyclePriceMap.get(FRAME) + "\n" +
-						   "Wheels : Rs." + cyclePriceMap.get(WHEELS) + "\n" + 
-						   "Chain Assembly : Rs." + cyclePriceMap.get(CHAIN_ASSEMBLY) + "\n" + 
-						   "Seating : Rs." + cyclePriceMap.get(SEATING) + "\n" + 
-						   "Handle Bar : Rs." + cyclePriceMap.get(HANDLE_BAR) + "\n");
+				System.out.println("Name : " + cyclePriceMap.get(NAME) + "\n" + "Cycle : Rs." + cyclePriceMap.get(CYCLE)
+						+ "\n" + "Frame : Rs." + cyclePriceMap.get(FRAME) + "\n" + "Wheels : Rs."
+						+ cyclePriceMap.get(WHEELS) + "\n" + "Chain Assembly : Rs." + cyclePriceMap.get(CHAIN_ASSEMBLY)
+						+ "\n" + "Seating : Rs." + cyclePriceMap.get(SEATING) + "\n" + "Handle Bar : Rs."
+						+ cyclePriceMap.get(HANDLE_BAR) + "\n");
 			}
-			
-		}catch(Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 }
 
-public class CycleEstimator{
+public class CycleEstimator {
 	@SuppressWarnings({ "unchecked", "resource" })
 	public static void main(String[] args) {
 		try {
