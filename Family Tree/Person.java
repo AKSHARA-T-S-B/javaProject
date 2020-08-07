@@ -14,6 +14,14 @@ public class Person {
 	private Gender Gender;
 	private Family family;
 	private Family parentFamily;
+	
+	public synchronized Family getFamily() {
+		return family;
+	}
+
+	public synchronized Family getParentFamily() {
+		return parentFamily;
+	}
 
 	public Person(String name, Gender Gender){
 		this.name = name;
@@ -139,6 +147,31 @@ public class Person {
 				return spouse;
 		}
 		return null;
+	}
+	
+	/**
+	 * print members of the family
+	 * @param root
+	 * @param level
+	 */
+	public void printMembers(Person root,int level)
+	{
+		if (root == null)
+			return;
+		String indent="";
+		for(int i=level; i > 0; i--)
+			indent +="\t";
+		if(root.getSpouse() != null)
+			System.out.println(indent+"->| "+root.getName()+"/"+root.getSpouse().getName());
+		else
+			System.out.println(indent+"->| "+root.getName());
+
+		if (root.getChildren() != null) {
+			level++;
+			for (Person person : root.getChildren()) {
+				printMembers(person,level);
+			}
+		}
 	}
 
 }

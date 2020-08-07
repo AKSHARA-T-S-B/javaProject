@@ -82,30 +82,6 @@ class RelationHandler{
 		return null;
 	}
 
-	/**
-	 * print members of the family
-	 * @param root
-	 * @param level
-	 */
-	void printMembers(Person root,int level)
-	{
-		if (root == null)
-			return;
-		String indent="";
-		for(int i=level; i > 0; i--)
-			indent +="\t";
-		if(root.getSpouse() != null)
-			System.out.println(indent+"->| "+root.getName()+"/"+root.getSpouse().getName());
-		else
-			System.out.println(indent+"->| "+root.getName());
-
-		if (root.getChildren() != null) {
-			level++;
-			for (Person person : root.getChildren()) {
-				printMembers(person,level);
-			}
-		}
-	}
 
 	/**
 	 * Add a child to a family
@@ -118,7 +94,7 @@ class RelationHandler{
 		Person person = searchMember(root, child);
 		if(person == null) {
 			Person mother = searchMember(root, motherName);
-			if(mother == null)
+			if(mother == null) 
 				System.out.println("PERSON_NOT_FOUND");
 			else if(mother != null && mother.getGender().equals(Gender.FEMALE)) {
 				Person spouse = mother.getSpouse();
@@ -154,47 +130,30 @@ class RelationHandler{
 	 * @param person : mother's details
 	 * @param gender : Gender of the kid
 	 */
-	public void getKids(Person person, Gender gender) {
+	public List<Person> getKids(Person person, Gender gender) {
+		List<Person> kidsList = new ArrayList<>();
 		List<Person> childrenList = person.getChildren();
-		if(childrenList.isEmpty())
-			System.out.println("NONE");
-		else {
-			List<Person> kidsList = new ArrayList<>();
-			kidsList.addAll(childrenList.stream().filter(action->action.getGender().equals(gender)).collect(Collectors.toList()));
-			printList(kidsList);
-		}
+		if(!childrenList.isEmpty()) 
+			kidsList.addAll(childrenList.stream()
+										.filter(action->action.getGender().equals(gender))
+										.collect(Collectors.toList()));
+		return kidsList;
 	}
 
-	/**
-	 * Print the siblings of the person
-	 * @param person
-	 */
-	public void getSiblings(Person person) {
-		List<Person> siblingsList = person.getSiblings();
-		if(siblingsList.isEmpty())
-			System.out.println("NONE");
-		else {
-			siblingsList.forEach(action -> {
-				System.out.print(action.getName() + " ");
-			});
-		}
-		System.out.println();
-	}
 
 	/**
 	 * Print the maternal or paternal aunts or uncles
 	 * @param parent
 	 * @param gender
 	 */
-	public void getAuntUncle(Person parent, Gender gender) {
+	public List<Person> getAuntUncle(Person parent, Gender gender) {
+		List<Person> auntUncleList = new ArrayList<>();
 		List<Person> siblingsList = parent.getSiblings();
-		if(siblingsList.isEmpty())
-			System.out.println("NONE");
-		else {
-			List<Person> auntUncleList = new ArrayList<>();
-			auntUncleList.addAll(siblingsList.stream().filter(action->action.getGender().equals(gender)).collect(Collectors.toList()));
-			printList(auntUncleList);
-		}
+		if(!siblingsList.isEmpty()) 
+			auntUncleList.addAll(siblingsList.stream()
+											 .filter(action->action.getGender().equals(gender))
+											 .collect(Collectors.toList()));
+		return auntUncleList;
 	}
 
 	/**
@@ -202,30 +161,28 @@ class RelationHandler{
 	 * @param person
 	 * @param gender
 	 */
-	public void getInLaws(Person person, Gender gender) {
+	public List<Person> getInLaws(Person person, Gender gender) {
 		List<Person> inLawList = new ArrayList<>();
 		Person spouse = person.getSpouse();
 		if(spouse != null) {
 			List<Person> siblingsList = spouse.getSiblings();
-			if(!siblingsList.isEmpty()) {
-
+			if(!siblingsList.isEmpty()) 
 				inLawList.addAll(siblingsList.stream()
-						.filter(action -> action.getGender().equals(gender))
-						.collect(Collectors.toList()));
-			}
+											 .filter(action -> action.getGender().equals(gender))
+											 .collect(Collectors.toList()));
 		}
 		List<Person> siblings = person.getSiblings();
 		if(!siblings.isEmpty()) {
 			List<Person> spouseList = new ArrayList<>();
 			spouseList.addAll(siblings.stream()
-					.map(action -> action.getSpouse())
-					.filter(result -> result != null)
-					.collect(Collectors.toList()));
+									  .map(action -> action.getSpouse())
+									  .filter(result -> result != null)
+									  .collect(Collectors.toList()));
 			inLawList.addAll(spouseList.stream()
-					.filter(action -> action.getGender().equals(gender))
-					.collect(Collectors.toList()));
+									   .filter(action -> action.getGender().equals(gender))
+									   .collect(Collectors.toList()));
 		}
-		printList(inLawList);
+		return inLawList;
 	}
 
 	/**
@@ -240,23 +197,23 @@ class RelationHandler{
 			System.out.println("PERSON_NOT_FOUND");
 		else { 
 			if(relation.equalsIgnoreCase("son")) 
-				getKids(person, Gender.MALE);
+				printList(getKids(person, Gender.MALE));
 			if(relation.equalsIgnoreCase("daughter")) 
-				getKids(person, Gender.FEMALE);
+				printList(getKids(person, Gender.FEMALE));
 			if(relation.equalsIgnoreCase("siblings")) 
-				getSiblings(person);
+				printList(person.getSiblings());;
 			if(relation.equalsIgnoreCase("paternal-uncle")) 
-				getAuntUncle(person.getFather(), Gender.MALE);
+				printList(getAuntUncle(person.getFather(), Gender.MALE));
 			if(relation.equalsIgnoreCase("paternal-aunt")) 
-				getAuntUncle(person.getFather(), Gender.FEMALE);
+				printList(getAuntUncle(person.getFather(), Gender.FEMALE));
 			if(relation.equalsIgnoreCase("maternal-uncle")) 
-				getAuntUncle(person.getMother(), Gender.MALE);
+				printList(getAuntUncle(person.getMother(), Gender.MALE));
 			if(relation.equalsIgnoreCase("maternal-aunt")) 
-				getAuntUncle(person.getMother(), Gender.FEMALE);
+				printList(getAuntUncle(person.getMother(), Gender.FEMALE));
 			if(relation.equalsIgnoreCase("sister-in-law")) 
-				getInLaws(person, Gender.FEMALE);
+				printList(getInLaws(person, Gender.FEMALE));
 			if(relation.equalsIgnoreCase("brother-in-law")) 
-				getInLaws(person, Gender.MALE);
+				printList(getInLaws(person, Gender.MALE));
 		}
 	}
 }
@@ -283,15 +240,18 @@ public class Geektrust {
 					flag = true;
 					if(splitString.length != 4)
 						System.out.println(input.trim() + " - Insufficient details provided to add a child");	
-					else
-						relationHandler.addMember(splitString[1], splitString[2], splitString[3], root);                                         
+					else {
+						relationHandler.addMember(splitString[1], splitString[2], splitString[3], root);
+						
+					}
 				}
 				if(splitString.length > 0 && splitString[0].contains("GET_RELATIONSHIP")) {
 					flag = true;
 					if(splitString.length != 3)
 						System.out.println(input + " - Insufficient details provided to get a relationship");
-					else
+					else {
 						relationHandler.getRelation(splitString[1], splitString[2], root);
+					}
 				}
 			}
 			if(!flag) {
@@ -301,5 +261,4 @@ public class Geektrust {
 			System.out.println("File not found. Incorrect file path specified !!! Try again with correct file path...");
 		}
 	}
-
 }
