@@ -18,7 +18,7 @@ Libraries added in the application
 
 Running in an IDE
 ---------------------
-If you want to run the application in an IDE, such as Eclipse, copy the code and add the corresponding dependencies into classpath and then run Geektrust.java to run application or TestRunner.java to run the tests.
+If you want to run the application in an IDE, such as Eclipse, copy the code and add the corresponding dependencies into classpath and then run FamilyTree.java to run application or TestFamilyTree.java to run the tests.
 
 Execution instructions:
 --------------------------

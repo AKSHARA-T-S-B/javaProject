@@ -221,7 +221,7 @@ class RelationHandler{
  * @author Akshara
  * Main program to run the Family tree application
  */
-public class Geektrust {
+public class FamilyTree {
 	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 		boolean flag = false;

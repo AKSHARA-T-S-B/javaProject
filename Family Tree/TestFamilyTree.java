@@ -13,9 +13,8 @@ import org.mockito.Mockito;
  * Testcases to test Geektrust.java
  * @author Akshara
  */
-public class TestGeekTrust {
+public class TestFamilyTree {
 	RelationHandler relationHandler = new RelationHandler();
-	Geektrust geekTrustFamily = new Geektrust();
 	RelationHandler relationHandlerMock = Mockito.mock(RelationHandler.class);
 	Person head = new Person("Shan", Gender.MALE);
 	

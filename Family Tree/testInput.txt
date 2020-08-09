@@ -1,0 +1,10 @@
+ADD_CHILD Tritha Akshara Female
+GET_RELATIONSHIP Lavnya Maternal-Aunt
+GET_RELATIONSHIP Dritha Paternal-uncle			
+GET_RELATIONSHIP Dritha Paternal-aunt
+GET_RELATIONSHIP Lavnya Maternal-uncle	
+GET_RELATIONSHIP Jaya Daughter
+GET_RELATIONSHIP Chika sister-in-law
+GET_RELATIONSHIP Vritha brother-in-law
+GET_RELATIONSHIP jnki son
+GET_RELATIONSHIP Vasa siblings
